@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="A hands-on, inert ClickFix awareness lab with a virtual clipboard and synthetic SOC telemetry.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>ClickFix — Awareness Lab</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/tailwind.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="lab-engine.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body class="bg-lab-ink font-sans antialiased">
+  <a href="#main" class="skip-link">Skip to lab</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Lab navigation">
+      <a class="brand" href="index.html" aria-label="ClickFix lab home"><span class="brand-mark" aria-hidden="true">C<span>↗</span></span><span>ClickFix<span class="brand-caption">AWARENESS LAB</span></span></a>
+      <div class="sidebar-label">WORKSPACE</div>
+      <div class="nav-tabs" role="tablist" aria-label="Workspace views" aria-orientation="vertical">
+        <button id="tab-simulation" class="nav-button active" role="tab" aria-selected="true" aria-controls="panel-simulation" data-tab="simulation"><span class="nav-icon" aria-hidden="true">◈</span>Simulation<span class="nav-end">01</span></button>
+        <button id="tab-detector" class="nav-button" role="tab" aria-selected="false" aria-controls="panel-detector" tabindex="-1" data-tab="detector"><span class="nav-icon" aria-hidden="true">⌁</span>Detector mode<span class="nav-end">02</span></button>
+      </div>
+      <div class="sidebar-note"><span class="small-caps">THE HUMAN LAYER</span><p>One familiar prompt.<br>One unexpected action.</p><div class="side-line"></div><span class="muted text-sm">Explore where trust becomes execution.</span></div>
+      <div class="sidebar-bottom"><span class="sandbox-mark" aria-hidden="true">◇</span><div>Inert environment<span>Browser simulation only</span></div></div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar flex items-center justify-between gap-4">
+        <div class="breadcrumb">Research workspace <span>/</span> <strong id="view-crumb">Simulation</strong></div>
+        <div class="flex items-center gap-3"><span class="training-badge"><span aria-hidden="true">◉</span> TRAINING SIMULATION</span><button id="lab-toggle" class="lab-toggle" type="button" role="switch" aria-checked="true" aria-controls="lab-dashboard"><span class="switch-track" aria-hidden="true"><span></span></span>Lab mode</button></div>
+      </header>
+
+      <main id="main" class="workspace" tabindex="-1">
+        <section id="panel-simulation" class="workspace-panel" role="tabpanel" aria-labelledby="tab-simulation">
+          <div class="page-heading flex flex-wrap items-end justify-between gap-4">
+            <div><div class="eyebrow">SOCIAL ENGINEERING / T1218.005</div><h1>Inside a ClickFix attempt<span class="accent">.</span></h1><p>Follow the lure. Watch the handoff. Find the detection opportunity.</p></div>
+            <button id="reset-demo" class="button button-quiet" type="button"><span aria-hidden="true">↻</span> Reset session</button>
+          </div>
+
+          <div class="session-strip"><div class="flex items-center gap-3"><span class="session-dot" aria-hidden="true"></span><strong id="session-status">Ready to explore</strong><span class="strip-divider"></span><span class="muted">Scenario 01</span><span class="scenario-name">Fake human verification</span></div><span id="session-id" class="font-mono text-xs">CF-00000000</span></div>
+
+          <div class="lab-layout" id="lab-layout">
+            <div class="simulation-column">
+              <section class="browser-stage" aria-labelledby="stage-title">
+                <div class="stage-heading flex items-center justify-between gap-3"><h2 id="stage-title"><span class="small-square" aria-hidden="true"></span>Participant view</h2><div class="viewport-controls" role="group" aria-label="Preview width"><button class="active" type="button" data-viewport="desktop" aria-pressed="true">Desktop</button><button type="button" data-viewport="mobile" aria-pressed="false">Mobile</button></div></div>
+                <div class="browser-frame" id="browser-frame">
+                  <div class="browser-toolbar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><div class="address-bar"><span aria-hidden="true">◇</span> training.clickfix.invalid<span class="address-label">LOCAL SIMULATION</span></div><span class="toolbar-menu" aria-hidden="true">···</span></div>
+                  <div class="simulation-safety">FICTIONAL VERIFICATION · USE THE ON-SCREEN CONTROLS</div>
+                  <div class="browser-content">
+                    <div class="verification-view" id="verification-view">
+                      <div class="fictional-brand"><span class="verify-logo" aria-hidden="true">✓</span>ClearCheck <span>DEMO</span></div>
+                      <h3>Checking your connection</h3><p class="verification-description">The page asks you to verify that you are human.<br>Start with the checkbox to inspect what happens.</p>
+                      <!-- A familiar trust cue is shown inside a permanently labeled training frame.
+                           Clicking changes a virtual clipboard in memory; it never accesses the OS clipboard. -->
+                      <button id="captcha-trigger" class="captcha-card" type="button" aria-label="Start the simulated human verification"><span id="captcha-indicator" class="fake-checkbox" aria-hidden="true"></span><span id="captcha-text">I'm not a robot</span><span class="captcha-brand">C<span>ClearCheck</span></span></button>
+                      <p class="verification-footnote">Example of a deceptive verification prompt</p>
+                    </div>
+
+                    <div id="handoff-view" class="handoff-view" hidden>
+                      <div class="handoff-header"><span class="mini-badge">SIMULATED PROMPT</span><span class="verification-reference font-mono"></span></div>
+                      <h3>“One more verification step”</h3><p class="handoff-caption">The lure now asks for access beyond the browser.</p>
+                      <div class="keyboard-guide" aria-label="Attack sequence shown for explanation only">
+                        <div data-guide="run" class="guide-step"><span class="guide-count">01</span><div><div class="keys"><kbd>Win</kbd><span>+</span><kbd>R</kbd></div><span>Open Run</span></div></div>
+                        <span class="guide-arrow" aria-hidden="true">→</span><div data-guide="paste" class="guide-step"><span class="guide-count">02</span><div><div class="keys"><kbd>Ctrl</kbd><span>+</span><kbd>V</kbd></div><span>Paste content</span></div></div>
+                        <span class="guide-arrow" aria-hidden="true">→</span><div data-guide="execute" class="guide-step"><span class="guide-count">03</span><div><div class="keys"><kbd>Enter</kbd></div><span>Run command</span></div></div>
+                      </div>
+                      <div class="boundary-callout"><span aria-hidden="true">!</span><p><strong>This is the red flag.</strong> A CAPTCHA never needs you to run a system command. Use the simulator below.</p></div>
+                      <div id="run-simulator" class="run-simulator" hidden>
+                        <div class="run-title"><span aria-hidden="true">▧</span> Run <span>IN-PAGE SIMULATOR</span></div>
+                        <div class="run-body"><label for="virtual-command">Open:</label><textarea id="virtual-command" rows="2" readonly placeholder="Waiting for a simulated paste…" spellcheck="false"></textarea></div>
+                        <p>Displayed text is inert training data.</p>
+                      </div>
+                      <button id="advance-demo" class="button button-blue" type="button">Simulate Win + R <span aria-hidden="true">→</span></button>
+                    </div>
+
+                    <div id="complete-view" class="complete-view" hidden><span class="complete-icon" aria-hidden="true">⌁</span><span class="mini-badge">SEQUENCE COMPLETE</span><h3>The handoff is the attack.</h3><p>The simulated command reached the execution stage. In a real incident, this is where endpoint telemetry becomes critical.</p><div class="complete-stats"><div><strong>4</strong><span>stages observed</span></div><div><strong>0</strong><span>system commands run</span></div></div><button id="open-detector" class="button button-blue" type="button">Inspect detection evidence <span aria-hidden="true">→</span></button></div>
+                    <div id="blocked-view" class="blocked-view" hidden><span class="complete-icon" aria-hidden="true">◇</span><h3>Virtual clipboard write blocked</h3><p>The error scenario stopped staging. Retry in the virtual clipboard to continue the demonstration.</p><button id="retry-staging" class="button button-blue" type="button">Retry virtual staging</button></div>
+                  </div>
+                  <div class="browser-bottom"><span>Isolated training surface</span><span>No operating-system interaction</span></div>
+                </div>
+                <div class="observation-note"><span class="note-label">OBSERVE</span><p id="observation-text">The checkbox borrows a familiar trust cue. A click should not be treated as consent to execute a command.</p></div>
+              </section>
+
+              <section class="pipeline-card" aria-labelledby="pipeline-title"><div class="flex items-center justify-between gap-3"><h2 id="pipeline-title">Attack pipeline</h2><span id="pipeline-count" class="font-mono text-xs muted">0 / 4 STAGES</span></div><ol class="pipeline"><li data-stage="lure"><span class="pipeline-node">01</span><div><strong>Trust cue</strong><span>Checkbox clicked</span></div></li><li data-stage="clipboard"><span class="pipeline-node">02</span><div><strong>Clipboard</strong><span>Virtual staging</span></div></li><li data-stage="run"><span class="pipeline-node">03</span><div><strong>User handoff</strong><span>Run + paste</span></div></li><li data-stage="execution"><span class="pipeline-node">04</span><div><strong>Execution</strong><span>Synthetic event</span></div></li></ol></section>
+            </div>
+
+            <aside id="lab-dashboard" class="lab-dashboard" aria-label="Security dashboard">
+              <div class="dashboard-header"><h2><span aria-hidden="true">⌁</span> Security dashboard</h2><span class="live-label">LIVE</span></div>
+              <section class="dashboard-section"><div class="section-caption"><h3>Virtual clipboard</h3><span id="clipboard-badge" class="status-pill">EMPTY</span></div><pre id="clipboard-value" class="clipboard-value">No data staged.
+
+Click the verification checkbox
+to observe the first transition.</pre><div class="clipboard-meta"><span id="clipboard-bytes">0 bytes</span><span>In-memory only</span></div></section>
+              <section class="dashboard-section"><div class="section-caption"><h3>Payload model</h3><span class="status-pill neutral">INERT</span></div><dl class="payload-fields"><div><dt>Process label</dt><dd class="font-mono">mshta.exe</dd></div><div><dt>Content</dt><dd>Training marker</dd></div><div><dt>Execution</dt><dd class="accent">Simulated</dd></div></dl><p class="dashboard-help">A data model represents the launcher. No executable payload is constructed.</p></section>
+              <section class="dashboard-section log-section"><div class="section-caption"><h3>Event stream</h3><span id="event-count" class="font-mono text-xs muted">01</span></div><ol id="event-stream" class="event-stream" aria-label="Synthetic event stream"></ol></section>
+              <div class="dashboard-footer"><button id="fault-toggle" type="button" role="switch" aria-checked="false" class="fault-toggle"><span class="switch-track" aria-hidden="true"><span></span></span>Simulate clipboard error</button><p id="fault-description">Applies to the next staging attempt.</p></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="panel-detector" class="workspace-panel" role="tabpanel" aria-labelledby="tab-detector" hidden>
+          <div class="page-heading flex flex-wrap items-end justify-between gap-4"><div><div class="eyebrow">BLUE TEAM / INVESTIGATION WORKSPACE</div><h1>Read the signal<span class="accent">.</span></h1><p>Connect the user action to the evidence an endpoint can record.</p></div><button id="load-evidence" class="button button-acid" type="button"><span aria-hidden="true">▷</span> Load sample evidence</button></div>
+          <div class="detector-banner"><span class="sample-symbol" aria-hidden="true">◈</span><div><strong id="detector-state">No execution evidence yet</strong><p id="detector-state-description">Complete the simulation or load the curated sample to inspect an alert.</p></div><span class="training-badge">SYNTHETIC TELEMETRY</span></div>
+
+          <div class="detector-layout">
+            <section class="evidence-card"><div class="card-title"><h2>Correlated process activity</h2><span class="status-pill neutral">ILLUSTRATIVE</span></div><div class="process-tree"><div class="process-node parent"><span class="process-glyph" aria-hidden="true">▣</span><div><strong>explorer.exe</strong><span>Interactive user shell</span></div><span class="font-mono text-xs muted">PID 4120</span></div><div class="process-branch"><span class="process-glyph warning" aria-hidden="true">⌘</span><div><strong>mshta.exe</strong><span>HTML Application Host</span></div><span id="process-evidence-status" class="status-pill">PENDING</span></div></div><div class="evidence-insight"><span class="note-label">CORRELATE</span><p>This parent-child relationship is a hunting lead. Investigate command-line content, timing, user context, and network activity before concluding ClickFix.</p></div>
+              <div class="evidence-table-wrap"><table class="evidence-table"><caption class="sr-only">Synthetic telemetry associated with the sample process</caption><thead><tr><th scope="col">Source</th><th scope="col">Evidence</th><th scope="col">State</th></tr></thead><tbody><tr><td>Sysmon · 1</td><td>Process creation<span>Image + parent + command line</span></td><td data-evidence-state="process">Awaiting</td></tr><tr><td>Sysmon · 13</td><td>RunMRU registry value<span>Corroborates Run dialog history</span></td><td data-evidence-state="registry">Awaiting</td></tr><tr><td>Sysmon · 3</td><td>Outbound connection<span>Process-linked remote activity</span></td><td data-evidence-state="network">Awaiting</td></tr></tbody></table></div>
+              <p class="telemetry-note">Event 3 is disabled by default. Collection filters and endpoint policy determine available evidence. RunMRU is corroboration; no single event proves a Win + R keystroke. Separately, configured Sysmon Event 24 can record clipboard changes.</p>
+              <details id="raw-evidence" class="evidence-details"><summary>View synthetic event fields</summary><pre id="evidence-json">No sample loaded.</pre></details>
+            </section>
+
+            <section class="verdict-card"><div class="section-caption"><h2>Analyst assessment</h2><span id="verdict-badge" class="status-pill neutral">WAITING</span></div><h3 id="verdict-title">Start with evidence.</h3><p id="verdict-text">The web page cannot read your EDR console, process tree, or Run history. This view uses a fixed teaching dataset.</p><div class="signal-metrics"><div><strong id="signal-count">0<span>/3</span></strong><span>Corroborating signals</span></div><div><strong>2</strong><span>ATT&amp;CK mappings</span></div></div><div class="mapping-list"><a href="https://attack.mitre.org/techniques/T1218/005/" target="_blank" rel="noopener noreferrer"><span>T1218.005</span>System Binary Proxy Execution: Mshta<span aria-hidden="true">↗</span></a><a href="https://attack.mitre.org/techniques/T1204/" target="_blank" rel="noopener noreferrer"><span>T1204</span>User Execution<span aria-hidden="true">↗</span></a></div><div class="assessment-footnote">These signals support a triage hypothesis, not an automatic malicious verdict.</div></section>
+          </div>
+
+          <section class="hunt-card"><div class="card-title"><div><h2>Detection workbench</h2><p>Microsoft Defender XDR · Advanced Hunting</p></div><span class="status-pill neutral">STARTER QUERY</span></div><pre class="query-code"><code><span class="code-comment">// Hunt for interactive-shell launches of MSHTA.</span>
+<span class="code-comment">// Review results; this filter alone does not confirm ClickFix.</span>
+DeviceProcessEvents
+<span class="code-operator">| where</span> Timestamp &gt; ago(7d)
+<span class="code-operator">| where</span> FileName =~ <span class="code-string">"mshta.exe"</span>
+<span class="code-operator">| where</span> InitiatingProcessFileName =~ <span class="code-string">"explorer.exe"</span>
+<span class="code-operator">| project</span> Timestamp, DeviceId, DeviceName, AccountName,
+          ProcessId, ProcessCommandLine, InitiatingProcessFileName
+<span class="code-operator">| order by</span> Timestamp desc</code></pre><div class="query-note">Hunt logic is shown for review; it is not connected to a tenant. Adapt to your telemetry, retention, and legitimate HTA use.</div></section>
+
+          <div class="learning-grid"><section class="learning-card"><span class="card-number">01 / VISIBILITY</span><h3>Where the browser ends</h3><p>Clipboard staging is a browser action. Windows Run is an OS action performed by the user. MSHTA runs in the user's context; it does not inherently grant administrator rights.</p><a href="https://www.microsoft.com/en-us/security/blog/2025/08/21/think-before-you-clickfix-analyzing-the-clickfix-social-engineering-technique/" target="_blank" rel="noopener noreferrer">Microsoft threat research <span aria-hidden="true">↗</span></a></section><section class="learning-card"><span class="card-number">02 / RESPONSE</span><h3>Validate, then contain</h3><p>Review the full process tree, command line, source URL, Run history, and related connections. Ask what the user saw and pasted. Preserve evidence and follow your incident response playbook.</p><a href="https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon" target="_blank" rel="noopener noreferrer">Sysmon event reference <span aria-hidden="true">↗</span></a></section><section class="learning-card"><span class="card-number">03 / PREVENTION</span><h3>Break the handoff</h3><p>Teach users to stop when a verification prompt asks for Run or a terminal. Consider application control for MSHTA where unneeded, validated in audit mode before enforcement.</p><a href="https://attack.mitre.org/techniques/T1218/005/" target="_blank" rel="noopener noreferrer">ATT&amp;CK mitigation context <span aria-hidden="true">↗</span></a></section></div>
+        </section>
+        <footer class="workspace-footer"><span>ClickFix / Research edition 2.0</span><span>Virtual clipboard · Synthetic evidence · No payload execution</span></footer>
+      </main>
+    </div>
+  </div>
+  <div id="live-announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+  <noscript><div class="noscript-message">JavaScript is required for this interactive lab. No commands have been copied or executed.</div></noscript>
+</body>
+</html>

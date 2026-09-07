@@ -1,0 +1,16 @@
+{
+  "name": "clickfix-awareness-lab",
+  "version": "2.0.0",
+  "private": true,
+  "description": "An inert, offline ClickFix social engineering awareness simulator.",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/tailwind.css -o ./assets/tailwind.css --minify",
+    "test": "node --test tests/*.test.cjs",
+    "check": "node --check app.js && node --check lab-engine.js"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.1.12",
+    "tailwindcss": "4.1.12"
+  },
+  "engines": { "node": ">=20" }
+}
